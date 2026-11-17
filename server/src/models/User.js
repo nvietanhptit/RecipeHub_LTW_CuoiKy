@@ -1,0 +1,55 @@
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Vui lòng nhập tên"],
+      trim: true,
+      minlength: [2, "Tên phải có ít nhất 2 ký tự"],
+      maxlength: [50, "Tên tối đa 50 ký tự"],
+    },
+    email: {
+      type: String,
+      required: [true, "Vui lòng nhập email"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Email không hợp lệ"],
+    },
+    password: {
+      type: String,
+      required: [true, "Vui lòng nhập mật khẩu"],
+      minlength: [6, "Mật khẩu phải có ít nhất 6 ký tự"],
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    avatar: { type: String, default: "" },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
+
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.comparePassword = function (plainPassword) {
+  return bcrypt.compare(plainPassword, this.password);
+};
+
+userSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+  },
+});
+
+export default mongoose.model("User", userSchema);
