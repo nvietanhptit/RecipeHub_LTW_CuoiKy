@@ -15,3 +15,7 @@ export const login = async (req, res) => {
   const { user, token } = await authService.loginUser({ email, password });
   res.status(200).json({ user, token });
 };
+
+export const getMe = (req, res) => {
+  res.status(200).json({ user: req.user });
+};
