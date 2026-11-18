@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import FormField from "../components/common/FormField";
 import useAuth from "../hooks/useAuth";
 import { validateRegisterForm } from "../utils/validators";
+import { saveEmail } from "../utils/savedEmails";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -39,6 +40,7 @@ export default function RegisterPage() {
         email: values.email.trim(),
         password: values.password,
       });
+      saveEmail(values.email);
       navigate("/", { replace: true });
     } catch (err) {
       setServerError(

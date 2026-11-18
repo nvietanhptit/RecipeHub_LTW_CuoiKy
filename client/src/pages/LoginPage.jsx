@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/common/FormField";
 import useAuth from "../hooks/useAuth";
 import { validateLoginForm } from "../utils/validators";
+import { getSavedEmails, saveEmail } from "../utils/savedEmails";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [savedEmails] = useState(getSavedEmails);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +36,7 @@ export default function LoginPage() {
       setSubmitting(true);
       setServerError("");
       await login(values.email.trim(), values.password);
+      saveEmail(values.email);
       navigate(redirectTo, { replace: true });
     } catch (err) {
       setServerError(
@@ -74,7 +77,13 @@ export default function LoginPage() {
           error={errors.email}
           placeholder="ban@example.com"
           autoComplete="email"
+          list="saved-emails"
         />
+        <datalist id="saved-emails">
+          {savedEmails.map((item) => (
+            <option key={item} value={item} />
+          ))}
+        </datalist>
 
         <FormField
           label="Mật khẩu"

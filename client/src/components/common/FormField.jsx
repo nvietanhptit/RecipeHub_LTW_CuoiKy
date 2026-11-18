@@ -9,6 +9,7 @@ export default function FormField({
   error,
   placeholder,
   autoComplete,
+  list,
 }) {
   const id = useId();
   const errorId = `${id}-error`;
@@ -26,6 +27,7 @@ export default function FormField({
         onChange={onChange}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        list={list}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
         className={`w-full rounded-md border px-3 py-2 text-sm outline-none transition-colors focus:ring-2 ${

@@ -5,6 +5,9 @@ import RecipesPage from "../pages/RecipesPage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import NotFoundPage from "../pages/NotFoundPage.jsx";
+import ProtectedRoute from "../components/common/ProtectedRoute.jsx";
+import ProfilePage from "../pages/ProfilePage.jsx";
+import AdminPage from "../pages/AdminPage.jsx";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +17,15 @@ export default function AppRoutes() {
         <Route path="recipes" element={<RecipesPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="profile" element={<ProfilePage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute roles={["admin"]} />}>
+          <Route path="admin" element={<AdminPage />} />
+        </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
