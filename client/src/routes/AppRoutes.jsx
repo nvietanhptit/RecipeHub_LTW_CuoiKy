@@ -8,6 +8,8 @@ import NotFoundPage from "../pages/NotFoundPage.jsx";
 import ProtectedRoute from "../components/common/ProtectedRoute.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import AdminPage from "../pages/AdminPage.jsx";
+import AdminRecipesPage from "../pages/admin/AdminRecipesPage.jsx";
+import AdminUsersPage from "../pages/admin/AdminUsersPage.jsx";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +26,8 @@ export default function AppRoutes() {
 
         <Route element={<ProtectedRoute roles={["admin"]} />}>
           <Route path="admin" element={<AdminPage />} />
+          <Route path="admin/recipes" element={<AdminRecipesPage />} />
+          <Route path="admin/users" element={<AdminUsersPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
